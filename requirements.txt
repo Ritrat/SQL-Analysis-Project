@@ -1,0 +1,7 @@
+Flask
+seaborn
+wordcloud
+matplotlib
+pandas
+openpyxl
+numpy
