@@ -1,3 +1,7 @@
+# author: Ritesh.V
+# Program: Exploratory Data Analysis for SQL Data
+
+#Process:
 #Import reqired libraries
 import re
 from collections import Counter
@@ -9,7 +13,7 @@ import numpy as np
 
 def preprocess_sql(sql_text):
     # Remove multi-line comments
-    sql_text = re.sub(r'/\*.*?\*/', '', sql_text, flags=re.DOTALL)
+    sql_text = re.sub(r'/\.?\*/', '', sql_text, flags=re.DOTALL)
     # Remove single-line comments
     sql_text = re.sub(r'--.*', '', sql_text)
     # Remove special characters and numbers, keep only alphabets and spaces
@@ -38,7 +42,7 @@ def plot_word_counts(word_counts, title, color):
 
 def extract_comments(sql_text):
     # Extract multi-line comments
-    multi_line_comments = re.findall(r'/\*.*?\*/', sql_text, flags=re.DOTALL)
+    multi_line_comments = re.findall(r'/\.?\*/', sql_text, flags=re.DOTALL)
     # Extract single-line comments
     single_line_comments = re.findall(r'--.*', sql_text)
     return multi_line_comments + single_line_comments
@@ -57,7 +61,7 @@ def extract_return_values(sql_text):
     return returns
 
 def extract_mathematical_formulae(sql_text):
-    formulae = re.findall(r'[\w@]+\s*[+\-*/%]\s*[\w@]+', sql_text)
+    formulae = re.findall(r'[\w@]+\s*[+\-/%]\s[\w@]+', sql_text)
     return formulae
 
 # Load the SQL files
@@ -132,15 +136,36 @@ df = pd.DataFrame(data)
 output_path = 'output.xlsx'
 df.to_excel(output_path, index=False)
 
-# Additional unique insight: Table usage frequency
-table_counts = Counter(all_tables)
+# Unique insight
+# Additional Visualizations
 
-# Plot table usage frequency
-tables, counts = zip(*table_counts.items())
-plt.figure(figsize=(12, 6))
-plt.bar(tables, counts, color='green')
-plt.xlabel('Table Names')
-plt.ylabel('Usage Counts')
-plt.title('Table Usage Frequency')
-plt.xticks(rotation=45)
+# 1. Word Frequency Distribution
+word_freq = pd.DataFrame(filtered_word_counts.items(), columns=['Word', 'Count'])
+plt.figure(figsize=(14, 7))
+sns.histplot(word_freq['Count'], kde=False, color='blue', bins=30)
+plt.title('Word Frequency Distribution')
+plt.xlabel('Frequency')
+plt.ylabel('Count of Words')
+plt.show()
+
+# 2. Pair Plot for Variable Interactions
+# Generating more varied synthetic data for the pair plot
+np.random.seed(42)
+variables_data = {
+    'var1': np.random.randn(100),
+    'var2': np.random.randn(100) * 2,
+    'var3': np.random.randn(100) + 3
+}
+variables_df = pd.DataFrame(variables_data)
+sns.pairplot(variables_df)
+plt.suptitle('Pair Plot for Variable Interactions', y=1.02)
+plt.show()
+
+# 3. Word Cloud for Comments
+all_comments_text = ' '.join(all_comments)
+wordcloud = WordCloud(width=800, height=400, background_color='white').generate(all_comments_text)
+plt.figure(figsize=(10, 5))
+plt.imshow(wordcloud, interpolation='bilinear')
+plt.axis('off')
+plt.title('Word Cloud for Comments')
 plt.show()
