@@ -68,6 +68,15 @@ An Excel file containing:
   - Word frequency distribution histogram.
   - Word cloud for comments.
 
+### Unique Insights:
+To add unique insights to the EDA process of SQL data, I have implemented individual data visualization processes. These include:
+
+- **Word Frequency Distribution**: Analyzing the distribution of words within the SQL files to identify the most common terms.
+- **Pair Plot Visualization**: Using Seaborn and NumPy to visualize the interactions between different variables, which helps in identifying potential correlations.
+- **Word Cloud**: Creating a word cloud from the comments in the SQL files, providing a visual representation of word frequency that is particularly useful for natural language processing (NLP) applications.
+These visualizations offer valuable insights and enhance the exploratory data analysis of SQL data.
+
+
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
